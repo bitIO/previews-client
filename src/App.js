@@ -135,7 +135,7 @@ function App() {
 
       <Container fluid textAlign="justified">
         {preview && (
-          <Card.Group itemsPerRow="6">
+          <Card.Group centered stackable>
             {preview.images?.map((preview) => (
               <Card>
                 <div className="image preview">
