@@ -124,7 +124,8 @@ function App() {
             }}
             placeholder="Type the URL to preview ..."
             value={url}
-            onChange={(e) => setUrl(e.target.value)}
+            onBlur={(e) => setUrl(e.target.value)}
+            onKeyUp={(e) => e.keyCode === 13 && setUrl(e.target.value)}
             type="url"
           />
         </MenuItem>
