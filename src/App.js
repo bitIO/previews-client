@@ -15,8 +15,11 @@ import {
 import "./App.css";
 import { fromNow } from "./utils/date";
 
-const defaultUrl = process.env.DEFAULT_URL || undefined;
-const apiHost = process.env.API_HOST || "https://previews-server.herokuapp.com";
+const defaultUrl =
+  "https://cloud.mail.aristocrazy.com/date_form?sk=0036N00000A9yGUQAZ";
+// const defaultUrl = process.env.DEFAULT_URL || undefined;
+const apiHost = "http://localhost:3001";
+// const apiHost = process.env.API_HOST || "https://previews-server.herokuapp.com";
 
 async function listPreviews(url) {
   let query = `?url=${url}`;
@@ -124,6 +127,7 @@ function App() {
             }}
             placeholder="Type the URL to preview ..."
             value={url}
+            onChange={(e) => setUrl(e.target.value)}
             onBlur={(e) => setUrl(e.target.value)}
             onKeyUp={(e) => e.keyCode === 13 && setUrl(e.target.value)}
             type="url"
