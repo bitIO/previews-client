@@ -4,24 +4,80 @@ import {
   Card,
   Container,
   Dimmer,
+  Grid,
   Header,
   Icon,
   Image,
   Input,
   Menu,
   MenuItem,
-  Segment,
 } from "semantic-ui-react";
 import "./App.css";
+import { fromNow } from "./utils/date";
 
 const defaultUrl =
   "https://cloud.mail.aristocrazy.com/date_form?sk=0036N00000A9yGUQAZ";
 
+// const apiHost = "http://localhost:3001";
+const apiHost = "https://previews-server.herokuapp.com";
+
 async function listPreviews(url) {
   let query = `?url=${url}`;
-  const response = await fetch(`http://localhost:3001/api/previews${query}`);
+  const response = await fetch(`${apiHost}/api/previews${query}`);
   const { previews } = await response.json();
   return previews;
+}
+
+function renderDescription(preview) {
+  if (!preview) {
+    return null;
+  }
+
+  return (
+    <Grid>
+      {renderDimensions("Expected:", preview.width, preview.height)}
+      {renderDimensions("Real:", preview.size.width, preview.size.height)}
+      {preview.isMobile && (
+        <Grid.Column width="16">
+          <div>
+            <Icon name="mobile altername" />
+            <span>is mobile</span>
+          </div>
+        </Grid.Column>
+      )}
+      {preview.isLandscape && (
+        <Grid.Column width="16">
+          <div>
+            <Icon name="mobile alternate" rotated="clockwise" />
+            <span>is landscape</span>
+          </div>
+        </Grid.Column>
+      )}
+      <Grid.Column width={16}>
+        <a
+          href={`${apiHost}${preview.path}?ts=${performance.now()}`}
+          target="_blank"
+          rel="noreferrer"
+          primary
+          fluid
+        >
+          <Icon name="external alternate" />
+          <span>View full size</span>
+        </a>
+      </Grid.Column>
+    </Grid>
+  );
+}
+
+function renderDimensions(label, width, height) {
+  return (
+    <Grid.Row>
+      <Grid.Column width="4">{label}</Grid.Column>
+      <Grid.Column textAlign="right" width="11">
+        {width} x {height} pixels
+      </Grid.Column>
+    </Grid.Row>
+  );
 }
 
 function App() {
@@ -40,7 +96,8 @@ function App() {
 
   async function requestPreviewGeneration(url) {
     console.log("Requesting preview for url", url);
-    const response = await fetch("http://localhost:3001/api/previews", {
+    setPreview([]);
+    const response = await fetch(`${apiHost}/api/previews`, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -78,48 +135,40 @@ function App() {
 
       <Container fluid textAlign="justified">
         {preview && (
-          <>
-            <Segment>
-              <Header as="h5">Fecha de actualización: {preview.updated}</Header>
-            </Segment>
-            <Card.Group itemsPerRow="6">
-              {preview.images?.map((preview) => (
-                <Card>
+          <Card.Group itemsPerRow="6">
+            {preview.images?.map((preview) => (
+              <Card>
+                <div className="image preview">
                   <Image
-                    src={`http://localhost:3001${preview.path}`}
+                    src={`${apiHost}${preview.path}?ts=${performance.now()}`}
                     key={preview.path}
-                    size="small"
                     ui={false}
-                    className="preview"
                   />
-                  <Card.Content>
-                    <Card.Header>{preview.deviceName}</Card.Header>
-                    <Card.Meta>
-                      <span className="date">
-                        {preview.width} x {preview.height} pixels
-                      </span>
-                    </Card.Meta>
-                    <Card.Description>
-                      Matthew is a musician living in Nashville.
-                    </Card.Description>
-                  </Card.Content>
-                  <Card.Content extra>
-                    <Button
-                      as="a"
-                      href={`http://localhost:3001${preview.path}`}
-                      target="_blank"
-                      rel="noreferrer"
-                      primary
-                      fluid
-                    >
-                      <Icon name="image" />
-                      Open in another tab
-                    </Button>
-                  </Card.Content>
-                </Card>
-              ))}
-            </Card.Group>
-          </>
+                </div>
+
+                <Card.Content>
+                  <Card.Header>{preview.deviceName}</Card.Header>
+                  <Card.Meta>{fromNow(preview.updated)}</Card.Meta>
+                  <Card.Description>
+                    {renderDescription(preview)}
+                  </Card.Description>
+                </Card.Content>
+                <Card.Content extra>
+                  <Button
+                    as="a"
+                    href={`${apiHost}${preview.path}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    primary
+                    fluid
+                  >
+                    <Icon name="image" />
+                    Open in another tab
+                  </Button>
+                </Card.Content>
+              </Card>
+            ))}
+          </Card.Group>
         )}
       </Container>
 
