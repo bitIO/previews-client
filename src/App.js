@@ -106,7 +106,7 @@ function App() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        url,
+        url: url.endsWith("/") ? url.slice(0, -1) : url,
         dimensions: getDimensions(dimensions),
         fullPage,
         beyondViewport,
