@@ -17,11 +17,10 @@ import "./App.css";
 import { fromNow } from "./utils/date";
 import { getDimensions, renderDropdown } from "./utils/dimensions";
 
-const defaultUrl =
-  "https://cloud.mail.aristocrazy.com/date_form?sk=0036N00000A9yGUQAZ";
-// const defaultUrl = process.env.DEFAULT_URL || undefined;
-const apiHost = "http://localhost:3001";
-// const apiHost = process.env.API_HOST || "https://previews-server.herokuapp.com";
+console.log(">>>>>", JSON.stringify(process.env, null, 2));
+const defaultUrl = process.env.REACT_APP_DEFAULT_URL || undefined;
+const apiHost =
+  process.env.REACT_APP_API_HOST || "https://previews-server.herokuapp.com";
 
 async function listPreviews(url) {
   let query = `?url=${url}`;
