@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import {
   Button,
   Card,
+  Checkbox,
   Container,
   Dimmer,
   Grid,
@@ -14,6 +15,7 @@ import {
 } from "semantic-ui-react";
 import "./App.css";
 import { fromNow } from "./utils/date";
+import { getDimensions, renderDropdown } from "./utils/dimensions";
 
 const defaultUrl =
   "https://cloud.mail.aristocrazy.com/date_form?sk=0036N00000A9yGUQAZ";
@@ -84,6 +86,9 @@ function App() {
   const [url, setUrl] = useState(defaultUrl);
   const [preview, setPreview] = useState();
   const [loading, setLoading] = useState(false);
+  const [dimensions, setDimensions] = useState([0]);
+  const [fullPage, setFullPage] = useState(true);
+  const [beyondViewport, setBeyondViewport] = useState(true);
 
   useEffect(() => {
     async function runPreviewsUpdate() {
@@ -101,7 +106,7 @@ function App() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ url }, null, 2),
+      body: JSON.stringify({ url, dimensions: getDimensions(dimensions) }),
       method: "POST",
     });
     const { preview } = await response.json();
@@ -109,10 +114,9 @@ function App() {
     setLoading(false);
   }
 
-  console.log("preview", preview);
   return (
     <>
-      <Menu attached top>
+      <Menu stackable attached top>
         <MenuItem>
           <Icon name="chrome" size="big" />
         </MenuItem>
@@ -131,6 +135,25 @@ function App() {
             onBlur={(e) => setUrl(e.target.value)}
             onKeyUp={(e) => e.keyCode === 13 && setUrl(e.target.value)}
             type="url"
+          />
+        </MenuItem>
+        <MenuItem>{renderDropdown(dimensions, setDimensions)}</MenuItem>
+        <MenuItem>
+          <Checkbox
+            toggle
+            label="Render full page"
+            value={fullPage}
+            defaultChecked
+            onChange={(e) => setFullPage(e.target.value)}
+          />
+        </MenuItem>
+        <MenuItem>
+          <Checkbox
+            toggle
+            label="Render beyond viewport"
+            value={beyondViewport}
+            defaultChecked
+            onChange={(e) => setBeyondViewport(e.value)}
           />
         </MenuItem>
       </Menu>
