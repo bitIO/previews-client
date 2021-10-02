@@ -90,6 +90,9 @@ dimensions.forEach((item) => {
 });
 
 function getDimensions(keys) {
+  if (keys.length === 0 || (keys.length === 1 && keys[0] === 0)) {
+    return dimensions;
+  }
   return dimensions.filter((d) => keys.indexOf(d.id) !== -1);
 }
 
