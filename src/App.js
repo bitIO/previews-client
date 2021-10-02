@@ -106,7 +106,12 @@ function App() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ url, dimensions: getDimensions(dimensions) }),
+      body: JSON.stringify({
+        url,
+        dimensions: getDimensions(dimensions),
+        fullPage,
+        beyondViewport,
+      }),
       method: "POST",
     });
     const { preview } = await response.json();
