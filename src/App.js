@@ -165,7 +165,7 @@ function App() {
         </MenuItem>
       </Menu>
 
-      <Container fluid textAlign="justified">
+      <Container fluid textAlign="justified" style={{ padding: "1rem" }}>
         {preview && (
           <Card.Group centered stackable>
             {preview.images?.map((preview) => (
