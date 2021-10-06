@@ -87,7 +87,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [dimensions, setDimensions] = useState([0]);
   const [fullPage, setFullPage] = useState(true);
-  const [beyondViewport, setBeyondViewport] = useState(true);
+  const [beyondViewport, setBeyondViewport] = useState(false);
 
   useEffect(() => {
     async function runPreviewsUpdate() {
@@ -156,7 +156,6 @@ function App() {
             toggle
             label="Render beyond viewport"
             value={beyondViewport}
-            defaultChecked
             onChange={(e) => setBeyondViewport(e.value)}
           />
         </MenuItem>
