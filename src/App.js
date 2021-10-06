@@ -101,20 +101,24 @@ function App() {
   async function requestPreviewGeneration(url) {
     console.log("Requesting preview for url", url);
     setPreview([]);
-    const response = await fetch(`${apiHost}/api/previews`, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        url: url.endsWith("/") ? url.slice(0, -1) : url,
-        dimensions: getDimensions(dimensions),
-        fullPage,
-        beyondViewport,
-      }),
-      method: "POST",
-    });
-    const { preview } = await response.json();
-    setPreview(preview);
+    try {
+      const response = await fetch(`${apiHost}/api/previews`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          url: url.endsWith("/") ? url.slice(0, -1) : url,
+          dimensions: getDimensions(dimensions),
+          fullPage,
+          beyondViewport,
+        }),
+        method: "POST",
+      });
+      const { preview } = await response.json();
+      setPreview(preview);
+    } catch (error) {
+      console.log("Error requesting preview", error);
+    }
     setLoading(false);
   }
 
