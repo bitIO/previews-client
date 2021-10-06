@@ -204,7 +204,7 @@ function App() {
         )}
       </Container>
 
-      <Dimmer active={loading} onClickOutside={() => setLoading(false)} page>
+      <Dimmer active={loading} page>
         <Header as="h2" icon inverted>
           <Icon loading name="spinner" />
           Generating preview ...
