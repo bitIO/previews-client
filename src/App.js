@@ -24,9 +24,14 @@ const apiHost =
 
 async function listPreviews(url) {
   let query = `?url=${url}`;
-  const response = await fetch(`${apiHost}/api/previews${query}`);
-  const { previews } = await response.json();
-  return previews;
+  try {
+    const response = await fetch(`${apiHost}/api/previews${query}`);
+    const { previews } = await response.json();
+    return previews;
+  } catch (error) {
+    console.log("Error requesting previews list", error);
+  }
+  return null;
 }
 
 function renderDescription(preview) {
@@ -92,8 +97,8 @@ function App() {
   useEffect(() => {
     async function runPreviewsUpdate() {
       console.log(">Requesting previews");
-      const preview = await listPreviews(url);
-      setPreview(preview);
+      const previews = await listPreviews(url);
+      setPreview(previews);
     }
     runPreviewsUpdate();
   }, [url]);
